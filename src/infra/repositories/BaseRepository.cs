@@ -1,0 +1,39 @@
+using System.Collections.Generic;
+
+using domain.entities;
+using domain.repositories;
+
+namespace infra.repositories
+{
+    public abstract class BaseRepository<TEntity> : IEntityRepository<TEntity>
+        where TEntity : IEntity
+    {
+        public IDatabase Database { get; }
+        public BaseRepository(IDatabase database)
+        {
+            this.Database = database;
+        }
+
+        public void Save(TEntity target)
+        {
+            if (this.Database.Find<TEntity>(target.Id) != null)
+            {
+                this.Database.Insert(target);
+            }
+            else
+            {
+                this.Database.Update(target);
+            }
+        }
+
+        public TEntity Find(int id)
+        {
+            return this.Database.Find<TEntity>(id);
+        }
+
+        public IEnumerable<TEntity> All()
+        {
+            return this.Database.All<TEntity>();
+        }
+    }
+}
