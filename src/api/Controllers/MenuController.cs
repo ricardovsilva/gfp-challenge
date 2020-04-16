@@ -5,7 +5,7 @@ namespace api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class MenuController : ControllerBase
     {
         [HttpGet]
         public async Task<string> All()
