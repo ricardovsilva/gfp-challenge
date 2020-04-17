@@ -21,7 +21,13 @@ namespace api.Controllers
         [HttpGet]
         public IEnumerable<Menu> All()
         {
-            return this.menuService.GetMenu().asArray();
+            return this.menuService.GetDefaultMenu().asArray();
+        }
+
+        [HttpGet("/{id}")]
+        public Menu Find(int id)
+        {
+            return this.menuService.FindById(id);
         }
     }
 }

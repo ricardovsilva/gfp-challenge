@@ -30,6 +30,7 @@ namespace infra.database
             where TEntity : class
         {
             this.Context.Set<TEntity>().Add(entity);
+            this.Context.SaveChanges();
         }
 
         public void Update<TEntity>(TEntity entity)

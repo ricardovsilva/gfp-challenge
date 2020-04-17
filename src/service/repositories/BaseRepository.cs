@@ -16,7 +16,7 @@ namespace service.repositories
 
         public void Save(TEntity target)
         {
-            if (this.Database.Find<TEntity>(target.Id) != null)
+            if (this.Database.Find<TEntity>(target.Id) == null)
             {
                 this.Database.Insert(target);
             }

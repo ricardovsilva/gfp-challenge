@@ -11,6 +11,7 @@ namespace domain.entities
         {
             this.Dishes = new List<Dish>();
         }
+
         public int Id { get; set; }
         public IEnumerable<Dish> Dishes { get; set; }
 

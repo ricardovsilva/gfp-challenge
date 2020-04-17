@@ -19,7 +19,8 @@ namespace api.inputs
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
-            if (!EnumUtils.IsValidEnumOfType(timeOfDay, typeof(TimeOfDay)))
+            this.timeOfDay = this.timeOfDay.ToUpper();
+            if (!EnumUtils.IsValidEnumOfType(this.timeOfDay, typeof(TimeOfDay)))
             {
                 results.Add(new ValidationResult("Time of day must be morning or night"));
             }

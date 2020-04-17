@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using domain.entities;
+using domain.factories;
 
 namespace infra.database
 {
@@ -14,7 +15,9 @@ namespace infra.database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Dish>().Ignore(_ => _.Menus);
+            modelBuilder.Entity<Dish>()
+                .Ignore(_ => _.Menus)
+                .HasData(MenuFactory.GetDefault().Dishes);
         }
 
         public virtual DbSet<Order> Orders { get; set; }

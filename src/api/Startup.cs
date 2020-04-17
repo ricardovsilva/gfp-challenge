@@ -34,7 +34,7 @@ namespace api
             services.AddControllers();
             services.AddScoped<IEntityRepository<Menu>, MockMenuRepository>();
             services.AddScoped<IEntityRepository<Order>, BaseRepository<Order>>();
-            services.AddScoped<DbContext, OrderContext>(_ =>
+            services.AddSingleton<DbContext, OrderContext>(_ =>
             {
                 var options = new DbContextOptionsBuilder<OrderContext>()
                     .UseInMemoryDatabase(databaseName: "inMemoryOrderDb")

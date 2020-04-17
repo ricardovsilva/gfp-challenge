@@ -4,6 +4,7 @@ namespace domain.interfaces
 {
     public interface IMenuService
     {
-        Menu GetMenu();
+        Menu GetDefaultMenu();
+        Menu FindById(int id);
     }
 }

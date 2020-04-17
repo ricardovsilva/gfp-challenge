@@ -27,8 +27,7 @@ namespace api.Controllers
         [HttpPost]
         public IActionResult New([FromBody]inputs.CreateOrder order)
         {
-            this.OrderService.Create(order.timeOfDay, order.dishesTypes);
-
+            var persistedOrder = this.OrderService.Create(order.timeOfDay, order.dishesTypes);
             return Ok();
         }
     }
