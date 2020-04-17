@@ -14,12 +14,15 @@
     </PackageReference>
     <PackageReference Include="fluentassertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="moq" Version="4.13.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\domain\domain.csproj" />
+    <ProjectReference Include="..\service\service.csproj" />
+    <ProjectReference Include="..\utils\utils.csproj" />
   </ItemGroup>
 
 </Project>
