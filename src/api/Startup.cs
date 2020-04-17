@@ -1,12 +1,16 @@
-using domain.entities;
-using domain.repositories;
-using infra.repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+
+using domain.entities;
+using domain.interfaces;
+using infra.database;
+using service.repositories;
+using service.services;
 
 namespace api
 {
@@ -15,6 +19,7 @@ namespace api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            DotNetEnv.Env.Load();
         }
 
         public IConfiguration Configuration { get; }
@@ -27,7 +32,19 @@ namespace api
             );
 
             services.AddControllers();
-            services.AddSingleton<IEntityRepository<Menu>, MockMenuRepository>();
+            services.AddScoped<IEntityRepository<Menu>, MockMenuRepository>();
+            services.AddScoped<IEntityRepository<Order>, BaseRepository<Order>>();
+            services.AddScoped<DbContext, OrderContext>(_ =>
+            {
+                var options = new DbContextOptionsBuilder<OrderContext>()
+                    .UseInMemoryDatabase(databaseName: "inMemoryOrderDb")
+                    .Options;
+
+                return new OrderContext(options);
+            });
+            services.AddScoped<IDatabase, Database>();
+            services.AddScoped<IMenuService, MockedMenuService>();
+            services.AddScoped<IOrderService, OrderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

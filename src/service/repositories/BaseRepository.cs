@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
 using domain.entities;
-using domain.repositories;
+using domain.interfaces;
 
-namespace infra.repositories
+namespace service.repositories
 {
-    public abstract class BaseRepository<TEntity> : IEntityRepository<TEntity>
-        where TEntity : IEntity
+    public class BaseRepository<TEntity> : IEntityRepository<TEntity>
+        where TEntity : class, IEntity
     {
         public IDatabase Database { get; }
         public BaseRepository(IDatabase database)
@@ -31,9 +31,9 @@ namespace infra.repositories
             return this.Database.Find<TEntity>(id);
         }
 
-        public IEnumerable<TEntity> All()
+        public IEnumerable<TEntity> GetAll()
         {
-            return this.Database.All<TEntity>();
+            return this.Database.GetAll<TEntity>();
         }
     }
 }

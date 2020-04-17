@@ -5,12 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="1.4.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\domain\domain.csproj" />
     <ProjectReference Include="..\infra\infra.csproj" />
+    <ProjectReference Include="..\service\service.csproj" />
+    <ProjectReference Include="..\utils\utils.csproj" />
   </ItemGroup>
 
 

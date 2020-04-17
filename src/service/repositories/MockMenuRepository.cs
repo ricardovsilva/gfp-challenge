@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using domain.entities;
 using domain.factories;
-using domain.repositories;
+using domain.interfaces;
 
-namespace infra.repositories
+namespace service.repositories
 {
     public class MockMenuRepository : IEntityRepository<Menu>
     {
@@ -14,7 +14,7 @@ namespace infra.repositories
             this.Menu = MenuFactory.GetDefault();
         }
 
-        public IEnumerable<Menu> All()
+        public IEnumerable<Menu> GetAll()
         {
             return new[] { Menu };
         }

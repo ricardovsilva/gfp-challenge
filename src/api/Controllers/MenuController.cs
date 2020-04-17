@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using domain.entities;
-using domain.repositories;
 using Microsoft.AspNetCore.Mvc;
+
+using domain.entities;
+using domain.interfaces;
+using utils.extensions;
 
 namespace api.Controllers
 {
@@ -11,23 +11,17 @@ namespace api.Controllers
     [ApiController]
     public class MenuController : ControllerBase
     {
-        private readonly IEntityRepository<Menu> menuRepository;
+        private readonly IMenuService menuService;
 
-        public MenuController(IEntityRepository<Menu> menuRepository)
+        public MenuController(IMenuService menuService)
         {
-            this.menuRepository = menuRepository;
+            this.menuService = menuService;
         }
 
         [HttpGet]
         public IEnumerable<Menu> All()
         {
-            return this.menuRepository.All();
-        }
-
-        [HttpPost]
-        public async Task<string> Save()
-        {
-            return "Saved";
+            return this.menuService.GetMenu().asArray();
         }
     }
 }
