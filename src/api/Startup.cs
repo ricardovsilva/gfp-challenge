@@ -16,6 +16,8 @@ namespace api
 {
     public class Startup
     {
+        const string MY_ALLOW_SPECIFIC_ORIGINS = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +29,16 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: MY_ALLOW_SPECIFIC_ORIGINS,
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             services.Configure<KestrelServerOptions>(
                 Configuration.GetSection("Kestrel")
             );
@@ -58,6 +70,8 @@ namespace api
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MY_ALLOW_SPECIFIC_ORIGINS);
 
             app.UseAuthorization();
 

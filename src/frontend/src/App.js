@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
+import styles from "./components/styles";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+import { getMenu } from "./actions";
+
+import Menu from "./components/Menu";
+import Cart from "./components/Cart";
+
+class App extends Component {
+  componentDidMount = () => {
+    this.props.getMenu();
+  };
+
+  render() {
+    return (
+      <>
+        <div className="p-grid" style={styles.home}>
+          <div className="p-col-8">
+            <Menu />
+          </div>
+          <div className="p-col-4" style={{ backgroundColor: "#000" }}>
+            <Cart style={styles.cart} />
+          </div>
+        </div>
+      </>
+    );
+  }
 }
 
-export default App;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getMenu }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(App);

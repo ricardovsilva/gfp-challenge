@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using domain.entities;
 using domain.interfaces;
 using utils.extensions;
+using System;
 
 namespace api.Controllers
 {
@@ -19,15 +20,23 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Menu> All()
+        public IEnumerable<Menu> GetAllMenus()
         {
             return this.menuService.GetDefaultMenu().asArray();
         }
 
-        [HttpGet("/{id}")]
-        public Menu Find(int id)
+        [Route("{id}")]
+        [HttpGet]
+        public ActionResult<Menu> GetMenuById(int id)
         {
-            return this.menuService.FindById(id);
+            try
+            {
+                return this.menuService.FindById(id);
+            }
+            catch (NotImplementedException)
+            {
+                return NotFound();
+            }
         }
     }
 }
