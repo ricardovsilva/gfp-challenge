@@ -22,6 +22,9 @@ namespace infra.database
                 .HasForeignKey(_ => _.OrderId);
 
             modelBuilder.Entity<OrderDish>()
+                .HasKey(_ => _.Id);
+
+            modelBuilder.Entity<OrderDish>()
                 .HasOne(_ => _.Dish)
                 .WithMany(_ => _.OrderDishes)
                 .HasForeignKey(_ => _.DishId);

@@ -7,7 +7,7 @@ import eventsReducer from "./eventsReducer";
 
 const rootReducer = combineReducers({
   menu: menuReducer,
-  order: orderReducer,
+  orders: orderReducer,
   cart: cartReducer,
   addToCartButton: addToCartButtonReducer,
   events: eventsReducer,

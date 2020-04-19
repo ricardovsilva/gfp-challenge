@@ -8,6 +8,7 @@ import {
   ORDER_SUBMITED,
   ORDER_SENT,
   RESET_ORDER_SENT_EVENT,
+  GET_ORDERS,
 } from "../types";
 import { MORNING } from "../constants";
 
@@ -66,7 +67,21 @@ export function submitOrder(dishes) {
 
   return {
     type: ORDER_SUBMITED,
-    payload: requests,
+    payload: Promise.all(requests),
+  };
+}
+
+export function getOrders() {
+  const response = axios
+    .get(`${API_BASE_URL}/order`)
+    .then((response) => response.data)
+    .then((data) =>
+      data.map((order) => ({ id: order.id, dishes: order.dishes }))
+    );
+
+  return {
+    type: GET_ORDERS,
+    payload: response,
   };
 }
 

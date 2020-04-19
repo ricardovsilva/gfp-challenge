@@ -46,14 +46,11 @@ class AddToCartButton extends Component {
 
 function mapStateToProps(state, props) {
   const { dishId } = props;
-  const { addToCartButton } = state;
-  const disabled =
-    addToCartButton &&
-    dishId in addToCartButton &&
-    addToCartButton[dishId].state.clicked;
+  const { cart } = state;
+  const cartDish = cart.dishes.find((_) => _.id === dishId);
 
   return {
-    disabled,
+    disabled: cartDish && !cartDish.canBeOrderedMultipleTimes,
   };
 }
 

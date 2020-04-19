@@ -8,6 +8,9 @@ import { MORNING, NIGHT } from "../constants";
 
 import { resetOrderSentEvent } from "../actions";
 import SubmitOrderButton from "./SubmitOrderButton";
+
+import CartDishDescription from "./CartDishDescription";
+
 import style from "./styles";
 
 class Cart extends Component {
@@ -22,31 +25,30 @@ class Cart extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          position: "relative",
-        }}
-      >
+      <div style={style.cart.container}>
         <Card title="Cart" style={style.cart.card}>
           {this.props.showOrderSentMessage ? (
-            <h1>Thank you! Our Master Chefs received your order :)</h1>
+            <h1 style={style.disabledText}>
+              Thank you! Our Master Chefs received your order :)
+            </h1>
+          ) : !this.props.haveDishes ? (
+            <h1 style={style.disabledText}>
+              Welcome to El Restauranto, add products to cart to submit an order
+            </h1>
           ) : null}
-          <div>
+          <div style={style.cart.dishes}>
             {this.props.showMorningDishes ? (
               <Panel header="Morning Dishes" style={style.cart.timesOfDay}>
-                {this.props.morningDishes.map((dish) => (
-                  <p key={dish.id}>{dish.description}</p>
-                ))}
+                <CartDishDescription dishes={this.props.morningDishes} />
               </Panel>
             ) : null}
             {this.props.showNightDishes ? (
               <Panel header="Night Dishes" style={style.cart.timesOfDay}>
-                {this.props.nightDishes.map((dish) => (
-                  <p key={dish.id}>{dish.description}</p>
-                ))}
+                <CartDishDescription dishes={this.props.nightDishes} />
               </Panel>
             ) : null}
-            <SubmitOrderButton />
+
+            <SubmitOrderButton disabled={!this.props.haveDishes} />
           </div>
         </Card>
       </div>
@@ -69,6 +71,7 @@ function mapStateToProps(state) {
 
   const morningDishes = getDishes(MORNING);
   const nightDishes = getDishes(NIGHT);
+  const haveDishes = morningDishes.length + nightDishes.length > 0;
 
   const cart = {
     morningDishes: morningDishes,
@@ -77,6 +80,7 @@ function mapStateToProps(state) {
     showNightDishes: nightDishes && nightDishes.length,
     events,
     showOrderSentMessage: events.orderSent,
+    haveDishes,
   };
 
   return cart;

@@ -8,14 +8,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { getMenu } from "./actions";
+import { getMenu, getOrders } from "./actions";
 
 import Menu from "./components/Menu";
 import Cart from "./components/Cart";
+import OrderTable from "./components/OrderTable";
 
 class App extends Component {
   componentDidMount = () => {
     this.props.getMenu();
+    this.props.getOrders();
   };
 
   render() {
@@ -25,8 +27,11 @@ class App extends Component {
           <div className="p-col-8">
             <Menu />
           </div>
-          <div className="p-col-4" style={{ backgroundColor: "#000" }}>
-            <Cart style={styles.cart} />
+          <div style={styles.sidebar} className="p-col-4">
+            <div style={styles.sidebar.container}>
+              <Cart style={styles.cart} />
+              <OrderTable />
+            </div>
           </div>
         </div>
       </>
@@ -35,7 +40,7 @@ class App extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMenu }, dispatch);
+  return bindActionCreators({ getMenu, getOrders }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(App);
