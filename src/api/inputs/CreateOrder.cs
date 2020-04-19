@@ -31,6 +31,10 @@ namespace api.inputs
                 {
                     results.Add(new ValidationResult($"Invalid dish type id: ${dishType}"));
                 }
+                else if ((DishTypes)dishType == DishTypes.DESSERT && timeOfDay.ToUpper() == "morning")
+                {
+                    results.Add(new ValidationResult($"Cannot add dessert for morning orders"));
+                }
             });
 
             return results;
