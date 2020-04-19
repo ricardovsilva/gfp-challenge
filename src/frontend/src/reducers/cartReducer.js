@@ -1,4 +1,4 @@
-import { ADD_TO_CART } from "../types";
+import { ADD_TO_CART, ORDER_SUBMITED } from "../types";
 
 export default (
   state = {
@@ -12,6 +12,10 @@ export default (
       newState.dishes = [...state.dishes];
       newState.dishes.push(action.dish);
       return newState;
+    case ORDER_SUBMITED:
+      return {
+        dishes: [],
+      };
     default:
       return state;
   }

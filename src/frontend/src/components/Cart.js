@@ -2,14 +2,24 @@ import React, { Component } from "react";
 import { Card } from "primereact/card";
 import { Panel } from "primereact/panel";
 import { connect } from "react-redux";
-import * as R from "ramda";
+import { bindActionCreators } from "redux";
 
 import { MORNING, NIGHT } from "../constants";
 
+import { resetOrderSentEvent } from "../actions";
 import SubmitOrderButton from "./SubmitOrderButton";
 import style from "./styles";
 
 class Cart extends Component {
+  state = {};
+  componentDidUpdate() {
+    if (this.props.events.orderSent) {
+      setTimeout(() => {
+        this.props.resetOrderSentEvent();
+      }, 3000);
+    }
+  }
+
   render() {
     return (
       <div
@@ -18,6 +28,9 @@ class Cart extends Component {
         }}
       >
         <Card title="Cart" style={style.cart.card}>
+          {this.props.showOrderSentMessage ? (
+            <h1>Thank you! Our Master Chefs received your order :)</h1>
+          ) : null}
           <div>
             {this.props.showMorningDishes ? (
               <Panel header="Morning Dishes" style={style.cart.timesOfDay}>
@@ -42,8 +55,9 @@ class Cart extends Component {
 }
 
 function mapStateToProps(state) {
+  const { events } = state;
   if (!state.cart) {
-    return;
+    return { events };
   }
   const getDishes = (timeOfDay) => {
     const dishes = state.cart.dishes
@@ -61,9 +75,15 @@ function mapStateToProps(state) {
     nightDishes: nightDishes,
     showMorningDishes: morningDishes && morningDishes.length,
     showNightDishes: nightDishes && nightDishes.length,
+    events,
+    showOrderSentMessage: events.orderSent,
   };
 
   return cart;
 }
 
-export default connect(mapStateToProps)(Cart);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ resetOrderSentEvent }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

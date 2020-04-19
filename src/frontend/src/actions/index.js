@@ -1,8 +1,15 @@
 import axios from "axios";
 
 import { API_BASE_URL } from "../config";
-import { MENU, ADD_TO_CART, ADD_TO_CART_BUTTON, SUBMIT_ORDER } from "../types";
-import { MORNING, NIGHT } from "../constants";
+import {
+  MENU,
+  ADD_TO_CART,
+  ADD_TO_CART_BUTTON,
+  ORDER_SUBMITED,
+  ORDER_SENT,
+  RESET_ORDER_SENT_EVENT,
+} from "../types";
+import { MORNING } from "../constants";
 
 export function getMenu() {
   const request = axios({
@@ -58,7 +65,19 @@ export function submitOrder(dishes) {
   });
 
   return {
-    type: SUBMIT_ORDER,
+    type: ORDER_SUBMITED,
     payload: requests,
+  };
+}
+
+export function emitOrderSent() {
+  return {
+    type: ORDER_SENT,
+  };
+}
+
+export function resetOrderSentEvent() {
+  return {
+    type: RESET_ORDER_SENT_EVENT,
   };
 }

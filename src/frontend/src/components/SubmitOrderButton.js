@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "primereact/button";
 
-import { submitOrder } from "../actions";
+import { submitOrder, emitOrderSent } from "../actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
@@ -15,14 +15,14 @@ class SubmitOrderButton extends Component {
 
   onClick = () => {
     this.props.submitOrder(this.props.dishes);
-    this.setState({ sendingOrder: true, clicked: true });
+    this.setState({ sendingOrder: true });
+  };
 
-    setTimeout(() => {
+  componentDidUpdate = () => {
+    if (!this.props.dishes.length && this.state.sendingOrder) {
+      this.props.emitOrderSent();
       this.setState({ sendingOrder: false });
-      setTimeout(() => {
-        this.setState({ clicked: false });
-      }, 1000);
-    }, 3000);
+    }
   };
 
   render() {
@@ -46,7 +46,7 @@ class SubmitOrderButton extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ submitOrder }, dispatch);
+  return bindActionCreators({ submitOrder, emitOrderSent }, dispatch);
 }
 
 function mapStateToProps(state) {
