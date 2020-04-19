@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import * as R from "ramda";
-import style from "./styles";
 
 import { getDishesGrouped } from "../utils/dishesUtils";
 
