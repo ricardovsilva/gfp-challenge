@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using domain.entities;
 using domain.interfaces;
 
@@ -16,7 +16,7 @@ namespace service.repositories
 
         public void Save(TEntity target)
         {
-            if (this.Database.Find<TEntity>(target.Id) == null)
+            if (!this.Database.GetAll<TEntity>().Any(_ => _.Id == target.Id))
             {
                 this.Database.Insert(target);
             }
@@ -31,7 +31,7 @@ namespace service.repositories
             return this.Database.Find<TEntity>(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
             return this.Database.GetAll<TEntity>();
         }

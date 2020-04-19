@@ -7,21 +7,22 @@ import { bindActionCreators } from "redux";
 import { addToCart, updateDishPanel } from "../actions";
 
 class AddToCartButton extends Component {
-  onClick = (event) => {
-    updateDishPanel(this.props.dishId, {
+  onClick = () => {
+    this.props.updateDishPanel(this.props.dishId, {
       state: {
         clicked: true,
       },
     });
 
-    this.props.addToCart(this.props.dishId);
+    this.props.addToCart(this.props.dish);
   };
 
   render() {
+    const { disabled, addMany } = this.props;
     return (
       <Button
         label={
-          !this.props.clicked
+          !disabled
             ? "Order It"
             : this.props.addMany
             ? "Order One More"
@@ -32,32 +33,32 @@ class AddToCartButton extends Component {
           bottom: 0,
           right: 0,
         }}
-        disabled={this.props.clicked && !this.props.addMany}
+        disabled={disabled && !addMany}
         className={
-          this.props.clicked && !this.props.addMany
-            ? "p-button-primary"
-            : "p-button-success"
+          disabled && !addMany ? "p-button-primary" : "p-button-success"
         }
         onClick={this.onClick}
-        icon={
-          this.props.clicked && !this.props.addMany
-            ? "pi pi-shopping-cart"
-            : undefined
-        }
+        icon={disabled && !addMany ? "pi pi-shopping-cart" : undefined}
       />
     );
   }
 }
 
-function mapStateToProps(state) {
-  console.log(state);
+function mapStateToProps(state, props) {
+  const { dishId } = props;
+  const { addToCartButton } = state;
+  const disabled =
+    addToCartButton &&
+    dishId in addToCartButton &&
+    addToCartButton[dishId].state.clicked;
+
   return {
-    clicked: state.clicked,
+    disabled,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addToCart }, dispatch);
+  return bindActionCreators({ addToCart, updateDishPanel }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToCartButton);

@@ -8,15 +8,15 @@ namespace domain.entities
     {
         public Order()
         {
-            this._dishes = new List<Dish>();
+            this.OrderDishes = new List<OrderDish>();
         }
 
-        private IList<Dish> _dishes;
-        public IList<Dish> Dishes
+        public virtual List<OrderDish> OrderDishes { get; set; }
+        public List<Dish> Dishes
         {
             get
             {
-                return new List<Dish>(this._dishes);
+                return this.OrderDishes.Select(_ => _.Dish).ToList();
             }
         }
         public int Id { get; set; }
@@ -25,14 +25,14 @@ namespace domain.entities
         {
             if (!dish.CanBeOrderedMultipleTimes)
             {
-                var alreadyAdded = this.Dishes.FirstOrDefault(_ => _ == dish) != null;
+                var alreadyAdded = this.OrderDishes.Any(_ => _.Dish == dish);
                 if (alreadyAdded)
                 {
                     throw new InvalidOrderException($"You cannot order {dish.Description} multiple times");
                 }
             }
 
-            this._dishes.Add(dish);
+            this.OrderDishes.Add(new OrderDish { Dish = dish });
         }
     }
 }

@@ -9,27 +9,28 @@ namespace service.services
     public class OrderService : IOrderService
     {
         private readonly IEntityRepository<Order> OrderRepository;
+        private readonly IDishService DishService;
+        private readonly IEntityRepository<OrderDish> OrderDishRepository;
 
-        public OrderService(IEntityRepository<Order> orderRepository)
+        public OrderService(IEntityRepository<Order> orderRepository, IEntityRepository<OrderDish> orderDishRepository, IDishService dishService)
         {
             this.OrderRepository = orderRepository;
+            OrderDishRepository = orderDishRepository;
+            this.DishService = dishService;
         }
 
-        public IEnumerable<Order> All()
+        public IQueryable<Order> All()
         {
             return OrderRepository.GetAll();
         }
 
-        public Order Create(string timeOfDay, IEnumerable<int> dishesTypes)
+        public Order Create(string timeOfDayText, IEnumerable<int> dishesTypes)
         {
             var order = new Order();
+            var dishes = DishService.All();
+            var timeOfDay = (TimeOfDay)Enum.Parse(typeof(TimeOfDay), timeOfDayText);
             dishesTypes
-                .Select(dishType =>
-                    new Dish()
-                    {
-                        DishType = (DishTypes)dishType,
-                        TimeOfDay = (TimeOfDay)Enum.Parse(typeof(TimeOfDay), timeOfDay)
-                    })
+                .Select(dishType => dishes.First(_ => _.DishType == (DishTypes)dishType && _.TimeOfDay == timeOfDay))
                 .ToList()
                 .ForEach(dish => order.AddDish(dish));
 

@@ -11,6 +11,7 @@ using domain.interfaces;
 using infra.database;
 using service.repositories;
 using service.services;
+using domain.factories;
 
 namespace api
 {
@@ -43,10 +44,14 @@ namespace api
                 Configuration.GetSection("Kestrel")
             );
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
             services.AddScoped<IEntityRepository<Menu>, MockMenuRepository>();
             services.AddScoped<IEntityRepository<Order>, BaseRepository<Order>>();
-            services.AddSingleton<DbContext, OrderContext>(_ =>
+            services.AddScoped<IEntityRepository<Dish>, BaseRepository<Dish>>();
+            services.AddScoped<IEntityRepository<OrderDish>, BaseRepository<OrderDish>>();
+            services.AddScoped<DbContext, OrderContext>(_ =>
             {
                 var options = new DbContextOptionsBuilder<OrderContext>()
                     .UseInMemoryDatabase(databaseName: "inMemoryOrderDb")
@@ -57,6 +62,9 @@ namespace api
             services.AddScoped<IDatabase, Database>();
             services.AddScoped<IMenuService, MockedMenuService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IDishService, DishService>();
+
+            SeedDatabase(services.BuildServiceProvider().GetService<DbContext>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +84,16 @@ namespace api
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        public void SeedDatabase(DbContext context)
+        {
+            var dishes = MenuFactory.GetDefault().Dishes;
+            foreach (var dish in dishes)
+            {
+                context.Set<Dish>().Add(dish);
+            }
+            context.SaveChanges();
         }
     }
 }

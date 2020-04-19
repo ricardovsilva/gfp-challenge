@@ -9,5 +9,6 @@ namespace domain.interfaces
         TEntity Find<TEntity>(int id) where TEntity : class;
         void Insert<TEntity>(TEntity entity) where TEntity : class;
         void Update<TEntity>(TEntity entity) where TEntity : class;
+        void Commit();
     }
 }

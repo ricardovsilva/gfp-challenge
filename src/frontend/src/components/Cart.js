@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card } from "primereact/card";
 import { Panel } from "primereact/panel";
 import { connect } from "react-redux";
+import * as R from "ramda";
 
 import { MORNING, NIGHT } from "../constants";
 
@@ -41,32 +42,28 @@ class Cart extends Component {
 }
 
 function mapStateToProps(state) {
-  if (state.menu.dishes) {
-    const dishesIds = state.cart.dishesIds;
-    const getDishes = (timeOfDay) =>
-      state.menu.dishes.filter(
-        (dish) => dishesIds.includes(dish.id) && dish.timeOfDay === timeOfDay
-      );
-
-    const morningDishes = getDishes(MORNING);
-    const nightDishes = getDishes(NIGHT);
-
-    const cart = {
-      morningDishes: morningDishes,
-      nightDishes: nightDishes,
-      showMorningDishes: morningDishes.length,
-      showNightDishes: nightDishes.length,
-    };
-
-    return cart;
-  } else {
-    return {
-      morningDishes: [],
-      nightDishes: [],
-      morningDishesDisplay: "visible",
-      nightDishesDisplay: "visible",
-    };
+  if (!state.cart) {
+    return;
   }
+  const getDishes = (timeOfDay) => {
+    const dishes = state.cart.dishes
+      .filter((dish) => dish.timeOfDay === timeOfDay)
+      .map((dish) => ({ ...dish }));
+
+    return dishes;
+  };
+
+  const morningDishes = getDishes(MORNING);
+  const nightDishes = getDishes(NIGHT);
+
+  const cart = {
+    morningDishes: morningDishes,
+    nightDishes: nightDishes,
+    showMorningDishes: morningDishes && morningDishes.length,
+    showNightDishes: nightDishes && nightDishes.length,
+  };
+
+  return cart;
 }
 
 export default connect(mapStateToProps)(Cart);

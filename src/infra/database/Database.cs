@@ -23,20 +23,24 @@ namespace infra.database
         public IQueryable<TEntity> GetAll<TEntity>()
             where TEntity : class
         {
-            return this.Context.Set<TEntity>().AsNoTracking();
+            return this.Context.Set<TEntity>();
         }
 
         public void Insert<TEntity>(TEntity entity)
             where TEntity : class
         {
             this.Context.Set<TEntity>().Add(entity);
-            this.Context.SaveChanges();
         }
 
         public void Update<TEntity>(TEntity entity)
             where TEntity : class
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Commit()
+        {
+            this.Context.SaveChanges();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using domain.entities;
 
 namespace domain.interfaces
@@ -6,6 +7,6 @@ namespace domain.interfaces
     public interface IOrderService
     {
         Order Create(string timeOfDay, IEnumerable<int> dishes);
-        IEnumerable<Order> All();
+        IQueryable<Order> All();
     }
 }

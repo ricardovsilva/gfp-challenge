@@ -15,12 +15,23 @@ namespace infra.database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OrderDish>().HasKey(od => new { od.OrderId, od.DishId });
+            modelBuilder.Entity<OrderDish>()
+                .HasOne(_ => _.Order)
+                .WithMany(_ => _.OrderDishes)
+                .HasForeignKey(_ => _.OrderId);
+
+            modelBuilder.Entity<OrderDish>()
+                .HasOne(_ => _.Dish)
+                .WithMany(_ => _.OrderDishes)
+                .HasForeignKey(_ => _.DishId);
+
             modelBuilder.Entity<Dish>()
-                .Ignore(_ => _.Menus)
-                .HasData(MenuFactory.GetDefault().Dishes);
+                .Ignore(_ => _.Menus);
         }
 
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Dish> Dishes { get; set; }
+        public virtual DbSet<OrderDish> OrderDishes { get; set; }
     }
 }

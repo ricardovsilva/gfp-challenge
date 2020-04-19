@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Button } from "primereact/button";
 
+import { submitOrder } from "../actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import styles from "./styles";
 
 class SubmitOrderButton extends Component {
@@ -10,6 +14,7 @@ class SubmitOrderButton extends Component {
   };
 
   onClick = () => {
+    this.props.submitOrder(this.props.dishes);
     this.setState({ sendingOrder: true, clicked: true });
 
     setTimeout(() => {
@@ -40,4 +45,12 @@ class SubmitOrderButton extends Component {
   }
 }
 
-export default SubmitOrderButton;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ submitOrder }, dispatch);
+}
+
+function mapStateToProps(state) {
+  return state.cart;
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SubmitOrderButton);

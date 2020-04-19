@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-using domain.interfaces;
 using domain.entities;
+using domain.interfaces;
+using api.filters;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace api.Controllers
 {
@@ -19,15 +21,19 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Order> All()
+        public ICollection<Order> All()
         {
-            return this.OrderService.All();
+            return this.OrderService.All()
+                .Include(_ => _.OrderDishes)
+                .ThenInclude(_ => _.Dish)
+                .ToList();
         }
 
         [HttpPost]
+        [UnitOfWork]
         public IActionResult New([FromBody]inputs.CreateOrder order)
         {
-            var persistedOrder = this.OrderService.Create(order.timeOfDay, order.dishesTypes);
+            this.OrderService.Create(order.timeOfDay, order.dishesTypes);
             return Ok();
         }
     }

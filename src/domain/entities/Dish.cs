@@ -9,7 +9,8 @@ namespace domain.entities
         public bool CanBeOrderedMultipleTimes { get; set; }
         public string Description { get; set; }
         public int Id { get; set; }
-        public IList<Menu> Menus { get; set; }
+        public virtual ICollection<OrderDish> OrderDishes { get; set; }
+        public virtual IList<Menu> Menus { get; set; }
 
         public override bool Equals(object obj)
         {

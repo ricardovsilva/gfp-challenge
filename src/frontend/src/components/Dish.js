@@ -36,6 +36,7 @@ export default function Dish(props) {
             </div>
             <AddToCartButton
               dishId={props.dish.id}
+              dish={props.dish}
               addMany={props.dish.canBeOrderedMultipleTimes}
             />
           </div>

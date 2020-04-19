@@ -2,13 +2,13 @@ import { combineReducers } from "redux";
 import menuReducer from "./menuReducer";
 import orderReducer from "./orderReducer";
 import cartReducer from "./cartReducer";
-import submitOrderButtonReducer from "./submitOrderButtonReducer";
+import addToCartButtonReducer from "./addToCartButtonReducer";
 
 const rootReducer = combineReducers({
   menu: menuReducer,
   order: orderReducer,
   cart: cartReducer,
-  submitOrderButton: submitOrderButtonReducer,
+  addToCartButton: addToCartButtonReducer,
 });
 
 export default rootReducer;

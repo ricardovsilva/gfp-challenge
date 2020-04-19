@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 
 namespace domain.interfaces
 {
@@ -6,6 +6,6 @@ namespace domain.interfaces
     {
         void Save(EntityType target);
         EntityType Find(int id);
-        IEnumerable<EntityType> GetAll();
+        IQueryable<EntityType> GetAll();
     }
 }
